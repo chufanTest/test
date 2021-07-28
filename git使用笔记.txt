@@ -1,0 +1,73 @@
+先导：
+	Workspace：工作区
+	Index/Stage：暂存区
+	Repository：仓库区（或本地仓库）
+	Remote：远程仓库
+
+常用命令：
+		一、创建、提交、查看、修改
+		    git config --global user.name "GitHub上的项目名称"
+			git config --global user.email "GitHub的登录邮箱"
+			cd 盘符   //进入项目所在盘
+			cd 目录   //进入项目目录
+			pwd       //显示当前目录
+			git init  //将目录变为可以管理的仓库
+			git add   //将目标文件添加到暂存区（无提示为成功）
+			git commit -m "可加注释"  //提交目标文件到Git仓库
+			git status  //查看状态
+			git diff +目标文件名  //查看目标文件的修改内容
+			rm +文件名	//删除文件
+		二、版本退回
+			git log  //查看历史记录
+			git log --pretty=oneline  //整理日志为单行
+			git reset --hard HEAD^  //退回到上一版本 退回上上一个版本 HEAD^再加一个^,退回到前一百个版本 HEAD~100
+			cat readme.txt  //查看文件内容
+			git reflog  //获取版本号
+			git reset --hard +版本号  //恢复最新版本
+			git checkout -- +文件名  //可以丢弃工作区的修改
+			rm +文件名  //删除文件
+		三、远程仓库
+			ssh-keygen -t rsa -C "登录名"  //创建密钥 
+			
+			//ssl链接被重置时 执行这两行
+			git config --global -l  //查看git配置
+			env|grep -i proxy        //检查环境变量
+			
+			//链接远程仓库并上传本地文件（第一次建立链接）
+            git remote add origin https://github.com/chufanTest/fourthTest.git
+			git branch -M master
+            git push -u origin master
+			
+			//建立链接之后，可以简化push命令
+			git push origin master 
+		四、创建与合并分支
+			git checkout -b dev  //创建并切换分支（git checkout命令上加-b参数表示创建并切换 
+												   相当于执行一下两行命令：git branch +分支名 //创建分支     
+												   git checkout +分支名  //切换分支）
+			git branch  //查看当前分支
+			git merge +分支  //合并分支到主分支master
+			git branch -d +分支名  //删除分支
+			git merge --no-ff -m +"注释" +分支名  //合并分支并禁用fast forward（快速合并）
+		五、Bug分支
+			git stash  //隐藏当前工作现场
+			git stash list //查看之前隐藏的工作现场
+			git stash apply  //回复工作现场，stash内容不会被删除
+			git stash drop  //删除工作现场
+			git stash pop  //恢复的同时把stash内容也删除了
+		六、多人协作
+			git remote  //查询远程库信息
+			git remote -v  //查询远程库详细信息
+			git push origin +分支名  //将文件推送到远程分支库
+			//要在分支库上坐开发，必把origin 的分支库分支到本地
+			git checkout -b +"分支库名" origin/分支库名 
+			//推送到远程库失败时，要先 git pull 把最新提交从origin/dev抓取下来，合并到本地，再推送
+			//当git pull 也失败时 时没有指定dev分支与远程origin/dev分支的链接
+			git branch --set-upstream dev origin/dev
+			//完成上叙操作，pull成功了若还有冲突
+			cat +文件名  //查看文件内容，找到冲突代码
+			//接上，Git用<<<<<<<,=======,>>>>>>>标记不同分支内容的
+				其中，<<<<<<<HEAD是指主分支修改的内容
+					  >>>>>>>+"分支"是指分支上修改的内容
+					  解决冲突需将分支上的内容修改为和主分支上一样的内容，
+					  然后add、commit 之后再次push
+			  
